@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, WebSocket
 from fastapi.responses import RedirectResponse
 
 port = 23954 #порт, на котором будет запускаться скри 
-laucnher_host = "127.0.0.1" #Адресс к лаунчеру
+launcher_host = "127.0.0.1" #Адресс к лаунчеру
 skin_path = "updates/skins/" #Путь до скинов
 head_path = "updates/heads/" #Путь до голов
 
@@ -27,15 +27,15 @@ async def create_head(uuid):
         conv = head.convert("P")
         resized_head = conv.resize((180, 180), resample=5)
         resized_head.save(f"{head_path}/{uuid}.png")
-        return f"http://{laucnher_host}/heads/{uuid}.png"
+        return f"http://{launcher_host}/heads/{uuid}.png"
     except:
-        return f"http://{laucnher_host}/heads/default_head.png"
+        return f"http://{launcher_host}/heads/default_head.png"
         
         
 @app.get("/head/{uuid}")
 async def head(uuid):
     if await check_head(uuid) == True:
-        path = f"http://{laucnher_host}/heads/{uuid}.png"
+        path = f"http://{launcher_host}/heads/{uuid}.png"
         return RedirectResponse(path)
     else:
         path = await create_head(uuid)
